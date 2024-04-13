@@ -1,0 +1,197 @@
+﻿﻿@{
+    ViewData["Title"] = "Movimientos Inventario";
+}
+
+<h2>Movimientos Inventario</h2>
+
+<br />
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCrearMovimientoInventario">Crear Movimiento Inventario</button>
+
+<br />
+<br />
+
+<div class="row" class="row align-items-end">
+    <div class="col-md-3">
+        <label for="tipoDocumento">Número de Documento:</label>
+        <input type="text" id="tipoDocumento" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <label for="numDocumento">Número de Documento:</label>
+        <input type="text" id="numDocumento" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <label for="proveedor">Proveedor:</label>
+        <input type="text" id="proveedor" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <label>&nbsp;</label>
+        <button type="button" class="btn btn-success" onclick="buscarMovimientosConFiltro()"><i class="bi bi-search"></i>Consultar</button>
+    </div>
+</div>
+
+<br />
+<br />
+
+<partial name="Listar" />
+
+<partial name="Modals" />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function crearMovimientoInventario() {
+            const COD_CIA = document.getElementById("COD_CIA").value;
+            const COMPANIA_VENTA_3 = document.getElementById("COMPANIA_VENTA_3").value;
+            const ALMACEN_VENTA = document.getElementById("ALMACEN_VENTA").value;
+            const TIPO_MOVIMIENTO = document.getElementById("TIPO_MOVIMIENTO").value;
+            const TIPO_DOCUMENTO = document.getElementById("TIPO_DOCUMENTO").value;
+            const NRO_DOCUMENTO = document.getElementById("NRO_DOCUMENTO").value;
+            const COD_ITEM_2 = document.getElementById("COD_ITEM_2").value;
+
+            const formData = new FormData();
+            formData.append("COD_CIA", COD_CIA);
+            formData.append("COMPANIA_VENTA_3", COMPANIA_VENTA_3);
+            formData.append("ALMACEN_VENTA", ALMACEN_VENTA);
+            formData.append("TIPO_MOVIMIENTO", TIPO_MOVIMIENTO);
+            formData.append("TIPO_DOCUMENTO", TIPO_DOCUMENTO);
+            formData.append("NRO_DOCUMENTO", NRO_DOCUMENTO);
+            formData.append("COD_ITEM_2", COD_ITEM_2);
+
+            fetch("/MovimientoInventario/CrearMovimientoInventario", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    $("#modalCrearMovimientoInventario").modal("hide");
+                    alertaConfirmacion(data.c_PARM_SAL);
+                    actualizarListado();
+
+                    // Limpiar campos
+                    document.getElementById("COD_CIA").value = "";
+                    document.getElementById("COMPANIA_VENTA_3").value = "";
+                    document.getElementById("ALMACEN_VENTA").value = "";
+                    document.getElementById("TIPO_MOVIMIENTO").value = "";
+                    document.getElementById("TIPO_DOCUMENTO").value = "";
+                    document.getElementById("NRO_DOCUMENTO").value = "";
+                    document.getElementById("COD_ITEM_2").value = "";
+                })
+                .catch(error => {
+                    $("#modalCrearMovimientoInventario").modal("hide");
+                    alertaError(error);
+                });
+        }
+
+        function actualizarListado() {
+            fetch("/MovimientoInventario/Index", {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("tablaMovimientoInventario").innerHTML = data;
+                })
+                .catch(error => {
+                    alertaError(error);
+                });
+        }
+
+        function buscarMovimientosConFiltro() {
+            var TIPO_DOCUMENTO = document.getElementById('tipoDocumento').value ?? '';
+            var NRO_DOCUMENTO = document.getElementById('numDocumento').value ?? '';
+            var PROVEEDOR = document.getElementById('proveedor').value ?? '';
+
+            const formData = new FormData();
+            formData.append("TIPO_DOCUMENTO", TIPO_DOCUMENTO);
+            formData.append("NRO_DOCUMENTO", NRO_DOCUMENTO);
+            formData.append("PROVEEDOR", PROVEEDOR);
+
+            fetch("/MovimientoInventario/ObtenerMovimientosInventarioConFiltro", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("tablaMovimientoInventario").innerHTML = data;
+                })
+                .catch(error => {
+                    alertaError(error);
+                });
+        }
+
+
+        function abrirModalActualizarMovimientoInventario(COD_CIA, COMPANIA_VENTA_3, ALMACEN_VENTA, TIPO_MOVIMIENTO, TIPO_DOCUMENTO, NRO_DOCUMENTO, COD_ITEM_2, PROVEEDOR) {
+            const formData = new FormData();
+            formData.append("COD_CIA", COD_CIA);
+            formData.append("COMPANIA_VENTA_3", COMPANIA_VENTA_3);
+            formData.append("ALMACEN_VENTA", ALMACEN_VENTA);
+            formData.append("TIPO_MOVIMIENTO", TIPO_MOVIMIENTO);
+            formData.append("TIPO_DOCUMENTO", TIPO_DOCUMENTO);
+            formData.append("NRO_DOCUMENTO", NRO_DOCUMENTO);
+            formData.append("COD_ITEM_2", COD_ITEM_2);
+            formData.append("PROVEEDOR", PROVEEDOR);
+
+            fetch(`/MovimientoInventario/ObtenerMovimientoInventarioPorId/`, {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("COD_CIA_Editado").value = data.COD_CIA;
+                    document.getElementById("COMPANIA_VENTA_3_Editado").value = data.COMPANIA_VENTA_3;
+                    document.getElementById("ALMACEN_VENTA_Editado").value = data.ALMACEN_VENTA;
+                    document.getElementById("TIPO_MOVIMIENTO_Editado").value = data.TIPO_MOVIMIENTO;
+                    document.getElementById("TIPO_DOCUMENTO_Editado").value = data.TIPO_DOCUMENTO;
+                    document.getElementById("NRO_DOCUMENTO_Editado").value = data.NRO_DOCUMENTO;
+                    document.getElementById("COD_ITEM_2_Editado").value = data.COD_ITEM_2;
+                    document.getElementById("PROVEEDOR_Editado").value = data.PROVEEDOR;
+                    $("#modalActualizarMovimientoInventario").modal("show");
+                })
+                .catch(error => {
+                    alertaError(error);
+                });
+        }
+
+        function actualizarMovimientoInventario() {
+            const COD_CIA = document.getElementById("COD_CIA_Editado").value;
+            const COMPANIA_VENTA_3 = document.getElementById("COMPANIA_VENTA_3_Editado").value;
+            const ALMACEN_VENTA = document.getElementById("ALMACEN_VENTA_Editado").value;
+            const TIPO_MOVIMIENTO = document.getElementById("TIPO_MOVIMIENTO_Editado").value;
+            const TIPO_DOCUMENTO = document.getElementById("TIPO_DOCUMENTO_Editado").value;
+            const NRO_DOCUMENTO = document.getElementById("NRO_DOCUMENTO_Editado").value;
+            const COD_ITEM_2 = document.getElementById("COD_ITEM_2_Editado").value;
+            const PROVEEDOR = document.getElementById("PROVEEDOR_Editado").value;
+
+            const formData = new FormData();
+            formData.append("COD_CIA", COD_CIA);
+            formData.append("COMPANIA_VENTA_3", COMPANIA_VENTA_3);
+            formData.append("ALMACEN_VENTA", ALMACEN_VENTA);
+            formData.append("TIPO_MOVIMIENTO", TIPO_MOVIMIENTO);
+            formData.append("TIPO_DOCUMENTO", TIPO_DOCUMENTO);
+            formData.append("NRO_DOCUMENTO", NRO_DOCUMENTO);
+            formData.append("COD_ITEM_2", COD_ITEM_2);
+            formData.append("PROVEEDOR", PROVEEDOR);
+
+            fetch("/MovimientoInventario/ActualizarMovimientoInventario", {
+                method: "PUT",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    $("#modalMovimientoInventario").modal("hide");
+                    alertaConfirmacion(data.c_PARM_SAL);
+                    actualizarListado();
+                })
+                .catch(error => {
+                    $("#modalMovimientoInventario").modal("hide");
+                    alertaError(error);
+                });
+        }
+    </script>
+}

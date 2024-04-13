@@ -1,0 +1,44 @@
+﻿@model List<MovimientoInventario>
+
+<table id="tablaMovimientoInventario" class="table centered-table table-bordered">
+    <thead>
+        <tr>
+            <th class="centered-header">Código CIA</th>
+            <th class="centered-header">Compañía venta</th>
+            <th class="centered-header">Almacen venta</th>
+            <th class="centered-header">Tipo de movimiento</th>
+            <th class="centered-header">Tipo de documento</th>
+            <th class="centered-header">Número documento</th>
+            <th class="centered-header">Codigo item</th>
+            <th class="centered-header">Proveedor</th>
+            <th class="centered-header">Método</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var movimientoInventario in Model)
+        {
+            <tr>
+                <td>@movimientoInventario.COD_CIA</td>
+                <td>@movimientoInventario.COMPANIA_VENTA_3</td>
+                <td>@movimientoInventario.ALMACEN_VENTA</td>
+                <td>@movimientoInventario.TIPO_MOVIMIENTO</td>
+                <td>@movimientoInventario.TIPO_DOCUMENTO</td>
+                <td>@movimientoInventario.NRO_DOCUMENTO</td>
+                <td>@movimientoInventario.COD_ITEM_2</td>
+                <td>@movimientoInventario.PROVEEDOR</td>
+                <td>
+                    <button type="button" class="btn btn-primary" onclick="abrirModalActualizarMovimientoInventario('@movimientoInventario.COD_CIA',
+                                                                                               '@movimientoInventario.COMPANIA_VENTA_3',
+                                                                                               '@movimientoInventario.ALMACEN_VENTA',
+                                                                                               '@movimientoInventario.TIPO_MOVIMIENTO',
+                                                                                               '@movimientoInventario.TIPO_DOCUMENTO',
+                                                                                               '@movimientoInventario.NRO_DOCUMENTO',
+                                                                                               '@movimientoInventario.COD_ITEM_2')">
+                        <i class="bi bi-pencil"></i> Editar
+                    </button>
+                    
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
