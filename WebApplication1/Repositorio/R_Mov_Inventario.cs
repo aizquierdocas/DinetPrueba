@@ -146,12 +146,13 @@ namespace WebApplication1.Repositorio
 
             try
             {
-                SqlCommand cmd = new SqlCommand("SP_LISTAR_MOVIMIENTOS_INVENTARIO_CON_FILTRO", conexion);
+                SqlCommand cmd = new SqlCommand("ConsultarMovimientos", conexion);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.Add("@TIPO_DOCUMENTO", SqlDbType.VarChar, 50).Value = TIPO_DOCUMENTO;
-                cmd.Parameters.Add("@NRO_DOCUMENTO", SqlDbType.VarChar, 50).Value = NRO_DOCUMENTO;
-                cmd.Parameters.Add("@PROVEEDOR", SqlDbType.VarChar, 50).Value = PROVEEDOR;
+                cmd.Parameters.Add("@FechaInicio", SqlDbType.VarChar, 50).Value = TIPO_DOCUMENTO;
+                cmd.Parameters.Add("@FechaFin", SqlDbType.VarChar, 50).Value = TIPO_DOCUMENTO;
+                cmd.Parameters.Add("@TipoMovimiento", SqlDbType.VarChar, 50).Value = TIPO_DOCUMENTO;
+                cmd.Parameters.Add("@NroDocumento", SqlDbType.VarChar, 50).Value = NRO_DOCUMENTO;
 
                 reader = await cmd.ExecuteReaderAsync();
 

@@ -6,14 +6,14 @@
 
 <br />
 
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCrearMovimientoInventario">Crear Movimiento Inventario</button>
+
 
 <br />
 <br />
 
-<div class="row" class="row align-items-end">
+<div class="row align-items-end">
     <div class="col-md-3">
-        <label for="tipoDocumento">Número de Documento:</label>
+        <label for="tipoDocumento">Tipo de Documento:</label>
         <input type="text" id="tipoDocumento" class="form-control" />
     </div>
     <div class="col-md-3">
@@ -24,11 +24,12 @@
         <label for="proveedor">Proveedor:</label>
         <input type="text" id="proveedor" class="form-control" />
     </div>
-    <div class="col-md-3">
-        <label>&nbsp;</label>
-        <button type="button" class="btn btn-success" onclick="buscarMovimientosConFiltro()"><i class="bi bi-search"></i>Consultar</button>
+    <div class="col-md-3 d-flex justify-content-end align-items-center">
+        <button type="button" class="btn btn-success me-2" onclick="buscarMovimientosConFiltro()"><i class="bi bi-search"></i> Consultar</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCrearMovimientoInventario">Crear Movimiento Inventario</button>
     </div>
 </div>
+
 
 <br />
 <br />
